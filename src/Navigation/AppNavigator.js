@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from '../Screens/HomeScreen';
 import TimerScreen from '../Screens/TimerScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -11,6 +12,7 @@ const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
   return (
+    
     <Tab.Navigator
       screenOptions={({route}) => ({
         tabBarStyle: {

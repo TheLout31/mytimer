@@ -9,22 +9,28 @@ import {
   FlatList,
   Modal,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
-const TimerScreen = () => {
-  const [time, setTime] = useState(60);
-  const [initialTime, setInitialTime] = useState('');
+const TimerScreen = ({route}) => {
+  const {categoryParam, timeParam,savedParam} = route.params || {};
+  // const [routeCategory, setRouteCategory] = useState(categoryParam? categoryParam : "");
+  // const [routeTime, setRouteTime] = useState(timeParam? timeParam : "");
+
+  const [time, setTime] = useState(0);
+  const [initialTime, setInitialTime] = useState(0);
   const [running, setRunning] = useState(false);
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState("");
   const [savedTimers, setSavedTimers] = useState([]);
   const [saved, setSaved] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const intervalRef = useRef(null);
 
+  /* 2. Get the param */
+  console.log(categoryParam);
   useEffect(() => {
     return () => clearInterval(intervalRef.current);
   }, []);
@@ -53,17 +59,16 @@ const TimerScreen = () => {
     saveTimerStatus('paused');
     clearInterval(intervalRef.current);
   };
-  
+
   const saveTimerStatus = async (status) => {
     const updatedTimers = savedTimers.map(timer =>
-      timer.id === currentTimerId ? { ...timer, status } : timer
+      timer.time === time && timer.category === category
+        ? { ...timer, status }
+        : timer
     );
     setSavedTimers(updatedTimers);
     await AsyncStorage.setItem('timers', JSON.stringify(updatedTimers));
   };
-  
-
-  
 
   const resetTimer = () => {
     stopTimer();
@@ -101,8 +106,7 @@ const TimerScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        >
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <View>
           {/* <Text style={styles.title}>Timer</Text> */}
           {/* <AnimatedCircularProgress
@@ -154,7 +158,7 @@ const TimerScreen = () => {
               placeholderTextColor="#777777"
               placeholder="Set Timer (seconds)"
               keyboardType="numeric"
-              value={initialTime.toString()}
+              value={ initialTime.toString()}
               onChangeText={text => {
                 const newTime = parseInt(text) || 0;
                 setInitialTime(newTime);

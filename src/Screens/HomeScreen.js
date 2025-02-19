@@ -11,7 +11,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useFocusEffect} from '@react-navigation/native';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
   const [List, setList] = useState({});
 
   const getData = async () => {
@@ -37,6 +37,7 @@ const HomeScreen = () => {
           keyExtractor={item => item.id.toString()}
           renderItem={({item}) => (
             <TouchableOpacity
+              
               style={{
                 backgroundColor: '#252533',
                 padding: 10,
@@ -104,14 +105,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   status: {
-    paddingTop:10,
-    paddingBottom:10,
+    paddingTop: 10,
+    paddingBottom: 10,
     paddingLeft: 10,
-    paddingRight:10,
+    paddingRight: 10,
     backgroundColor: '#4CB050',
     borderRadius: 18,
     alignItems: 'center',
-    justifyContent:'center'
+    justifyContent: 'center',
   },
   statusText: {color: 'white', fontSize: 14, fontWeight: 'bold'},
 });
